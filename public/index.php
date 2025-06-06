@@ -30,8 +30,8 @@ $request = ServerRequestFactory::fromGlobals(
 
 $map = $routerContainer->getMap();
 
-$map->get('home', '/', function () {
-    return new HtmlResponse('This tuts rocks!!!');
+$map->get('home', '/', function ($request) {
+    return new \App\Controller\HomeController()->index();
 });
 
 $map->get('about', '/about', function () {
