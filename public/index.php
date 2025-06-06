@@ -3,15 +3,20 @@
 declare(strict_types=1);
 
 use Aura\Router\RouterContainer;
+use Dikki\DotEnv\DotEnv;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+(new DotEnv(__DIR__ . '/../'))->load();
+
 // Initialize Whoops for better error handling
-$whoops = new \Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-$whoops->register();
+if (getenv('APP_ENV') === 'development') {
+    $whoops = new \Whoops\Run;
+    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->register();
+}
 
 $routerContainer = new RouterContainer();
 
