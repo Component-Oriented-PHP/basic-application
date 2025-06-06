@@ -30,24 +30,19 @@ $request = ServerRequestFactory::fromGlobals(
 
 $map = $routerContainer->getMap();
 
-$map->get('home', '/', function ($request) {
-    return new \App\Controller\HomeController()->index();
-});
+//map the route definitions
+$routes = require_once __DIR__ . '/../config/routes.php';
+foreach ($routes as $name => $route) {
+    $requestMethod = $route[0];
+    $path = $route[1];
+    $handler = explode('::', $route[2]);
+    $controller = $handler[0];
+    $method = $handler[1];
 
-$map->get('about', '/about', function () {
-    return new HtmlResponse('This is the about page!!!');
-});
-
-$map->get('contact', '/contact', function () {
-    return new HtmlResponse('This is the contact page!!!');
-});
-
-$map->get('blog_slug', '/blog/{slug}', function ($request) {
-    // Get the slug from the route attributes
-    $slug = (string) $request->getAttribute('slug');
-    $html = 'This is the blog page for ' . $slug . '!!!';
-    return new HtmlResponse($html);
-});
+    $map->$requestMethod($name, $path, function ($request) use ($controller, $method) {
+        return (new $controller($request))->$method();
+    });
+}
 
 // match the request
 $matcher = $routerContainer->getMatcher();
