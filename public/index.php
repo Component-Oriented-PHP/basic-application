@@ -6,9 +6,12 @@ use Aura\Router\RouterContainer;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 
-ini_set('display_errors', '1');
-
 require_once __DIR__ . '/../vendor/autoload.php';
+
+// Initialize Whoops for better error handling
+$whoops = new \Whoops\Run;
+$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->register();
 
 $routerContainer = new RouterContainer();
 
