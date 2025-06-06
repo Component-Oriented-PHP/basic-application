@@ -51,38 +51,32 @@ if (!$route) {
     $failedRoute = $matcher->getFailedRoute();
 
     // we need to handle the failed route
-    match ($failedRoute->failedRule) {
+    $response = match ($failedRoute->failedRule) {
         // if method was not allowed (e.g., received GET request on a POST route)
         'Aura\Router\Rule\Allows' => (function () {
                 // 405 METHOD NOT ALLOWED
-                http_response_code(405);
-                echo '405 METHOD NOT ALLOWED';
+                return new HtmlResponse('405 METHOD NOT ALLOWED!!!', 405);
             })(),
         // if content type was not accepted (e.g. received HTML request on a JSON route)
         'Aura\Router\Rule\Accepts' => (function () {
                 // 406 NOT ACCEPTABLE
-                http_response_code(406);
-                echo '406 NOT ACCEPTABLE';
+                return new HtmlResponse('406 NOT ACCEPTABLE!!!', 406);
             })(),
         // handle as a 404 error for other cases
-        default => (function () {
-                // 404 NOT FOUND
-                http_response_code(404);
-                echo '404 NOT FOUND!';
-            })()
+        default => new HtmlResponse('404 NOT FOUND!!!', 404)
     };
+} else {
+    // A route was found, so let's handle the "happy path"
 
-    exit;
+    // add route attributes to the request
+    foreach ($route->attributes as $key => $val) {
+        $request = $request->withAttribute($key, $val);
+    }
+
+    // dispatch the route and get the response
+    $handler = $route->handler;
+    $response = $handler($request); // This executes our closure and gets the HtmlResponse object
 }
-
-// add route attributes to the request so we need not pass $router to handlers as well
-foreach ($route->attributes as $key => $val) {
-    $request = $request->withAttribute($key, $val);
-}
-
-// dispatch the route
-$handler = $route->handler; // get the callable function we defined for each route
-$response = $handler($request); // run the function and pass the request object to it for further usage in the function
 
 // emit the response
 foreach ($response->getHeaders() as $name => $values) {
