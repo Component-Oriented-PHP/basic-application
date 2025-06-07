@@ -42,7 +42,7 @@ $request = ServerRequestFactory::fromGlobals(
 $map = $routerContainer->getMap();
 
 //map the route definitions
-$routes = require_once __DIR__ . '/../config/routes.php';
+$routes = $container->make(\App\Library\Config\ConfigInterface::class)->get('routes');
 foreach ($routes as $name => $route) {
     $requestMethod = $route[0];
     $path = $route[1];

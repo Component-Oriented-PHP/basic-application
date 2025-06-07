@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Library\Service;
+namespace App\Library\Config;
 
-class ConfigFetcher
+class PHPConfigFetcher implements ConfigInterface
 {
     public function get(string $key): mixed
     {
