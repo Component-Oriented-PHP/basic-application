@@ -17,7 +17,8 @@ class HomeController
     public function index(ServerRequestInterface $request)
     {
         return new HtmlResponse($this->view->render('home/index', [
-            'title' => 'This is a title for Homepage!'
+            'title' => 'This is a title for Homepage!',
+            'site_name' => 'COPHP'
         ]));
     }
 }
