@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Library\View\RendererInterface;
+use App\Library\View\TwigRenderer;
 use Aura\Router\RouterContainer;
+use Auryn\Injector;
 use Dikki\DotEnv\DotEnv;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\ServerRequestFactory;
@@ -18,6 +21,17 @@ if (getenv('APP_ENV') === 'development') {
     $whoops->register();
 }
 
+// DI
+$container = new Injector();
+
+# register services
+// this tells the container: "When someone asks for RendererInterface, give them TwigRenderer"
+$container->alias(RendererInterface::class, TwigRenderer::class);
+
+// OR: to use PlatesRenderer instead, uncomment the line below and comment the one above
+// $injector->alias(RendererInterface::class, \App\Library\View\PlatesRenderer::class);
+
+// Router
 $routerContainer = new RouterContainer();
 
 $request = ServerRequestFactory::fromGlobals(
@@ -39,8 +53,12 @@ foreach ($routes as $name => $route) {
     $controller = $handler[0];
     $method = $handler[1];
 
-    $map->$requestMethod($name, $path, function ($request) use ($controller, $method) {
-        return (new $controller())->$method($request);
+    // we need to make use of DI container to pass the necessary services to controller for usage
+    $map->$requestMethod($name, $path, function ($request) use ($controller, $method, $container) {
+        // Here's the magic! The container automatically creates the controller
+        // and injects all its dependencies
+        $controllerInstance = $container->make($controller); // this is needed; we need to instantiate controller via DI
+        return $controllerInstance->$method($request);
     });
 }
 
