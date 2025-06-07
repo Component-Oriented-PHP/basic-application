@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Library\View\RendererInterface;
-use App\Library\View\TwigRenderer;
 use Aura\Router\RouterContainer;
 use Auryn\Injector;
 use Dikki\DotEnv\DotEnv;
@@ -25,11 +23,10 @@ if (getenv('APP_ENV') === 'development') {
 $container = new Injector();
 
 # register services
-// this tells the container: "When someone asks for RendererInterface, give them TwigRenderer"
-$container->alias(RendererInterface::class, TwigRenderer::class);
-
-// OR: to use PlatesRenderer instead, uncomment the line below and comment the one above
-// $injector->alias(RendererInterface::class, \App\Library\View\PlatesRenderer::class);
+$dependencies = require_once __DIR__ . '/../config/dependencies.php';
+foreach ($dependencies as $key => $value) {
+    $container->alias($key, $value);
+}
 
 // Router
 $routerContainer = new RouterContainer();
