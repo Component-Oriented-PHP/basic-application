@@ -18,7 +18,6 @@ class HomeController
     {
         return new HtmlResponse($this->view->render('home/index', [
             'title' => 'This is a title for Homepage!',
-            'site_name' => 'COPHP'
         ]));
     }
 }
