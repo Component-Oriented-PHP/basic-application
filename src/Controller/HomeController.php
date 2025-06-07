@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Library\PlatesRenderer;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController
 {
-    private PlatesRenderer $view;
+    private $view;
 
     public function __construct()
     {
-        $this->view = new PlatesRenderer();
+        $this->view =  (new \App\Library\Service\ServiceLocator())->get('view');
     }
 
     public function index(ServerRequestInterface $request)
