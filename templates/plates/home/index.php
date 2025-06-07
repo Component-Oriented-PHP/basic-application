@@ -1,4 +1,4 @@
-<?php $this->layout('layouts/default', ['title' => 'Home']) ?>
+<?php $this->layout('layouts/default', ['title' => $title]) ?>
 
 Welcome to <span class="platesphp">PlatesPHP</span>!
 

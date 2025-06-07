@@ -1,4 +1,4 @@
-<?php $this->layout('layouts/default', ['title' => 'About' /*this 'About' is to be replaced with  a variable passed by our controller*/]) ?>
+<?php $this->layout('layouts/default', ['title' => $title]) ?>
 
 Welcome to <span class="platesphp">PlatesPHP</span> About Us Page!
 

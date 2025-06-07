@@ -8,8 +8,9 @@ use App\Library\PlatesRenderer;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
-class HomeController
+class AboutController
 {
+
     private PlatesRenderer $view;
 
     public function __construct()
@@ -19,8 +20,8 @@ class HomeController
 
     public function index(ServerRequestInterface $request)
     {
-        return new HtmlResponse($this->view->render('home/index', [
-            'title' => 'This is a title for Homepage!'
+        return new HtmlResponse($this->view->render('about/index', [
+            'title' => 'This is a title for About Us!'
         ]));
     }
 }
