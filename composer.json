@@ -8,7 +8,8 @@
         "dikki/dotenv": "^2.0",
         "filp/whoops": "^2.18",
         "laminas/laminas-diactoros": "^3.6",
-        "league/plates": "^3.6"
+        "league/plates": "^3.6",
+        "twig/twig": "^3.21"
     },
     "autoload": {
         "psr-4": {
