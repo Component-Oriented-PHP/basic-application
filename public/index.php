@@ -40,7 +40,7 @@ foreach ($routes as $name => $route) {
     $method = $handler[1];
 
     $map->$requestMethod($name, $path, function ($request) use ($controller, $method) {
-        return (new $controller($request))->$method();
+        return (new $controller())->$method($request);
     });
 }
 
