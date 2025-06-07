@@ -9,6 +9,7 @@
         "filp/whoops": "^2.18",
         "laminas/laminas-diactoros": "^3.6",
         "league/plates": "^3.6",
+        "rdlowrey/auryn": "^1.4",
         "twig/twig": "^3.21"
     },
     "autoload": {

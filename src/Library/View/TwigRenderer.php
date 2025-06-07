@@ -7,7 +7,7 @@ namespace App\Library\View;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-class TwigRenderer
+class TwigRenderer implements RendererInterface
 {
     private Environment $renderer;
 

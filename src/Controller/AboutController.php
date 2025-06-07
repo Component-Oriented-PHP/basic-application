@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Library\View\RendererInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
 class AboutController
 {
 
-    private $view;
 
-    public function __construct()
+    public function __construct(private RendererInterface $view)
     {
-        $this->view =  (new \App\Library\Service\ServiceLocator())->get('view');
     }
 
     public function index(ServerRequestInterface $request)
