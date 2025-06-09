@@ -16,7 +16,6 @@ class HomeController
 
     public function index(ServerRequestInterface $request)
     {
-        var_dump((new \App\Service\MarkdownParser())->parse(file_get_contents(__DIR__ . '/../../content/about.md')));die;
         return new HtmlResponse($this->view->render('home/index', [
             'title' => 'This is a title for Homepage!',
         ]));

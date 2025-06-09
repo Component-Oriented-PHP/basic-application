@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Markdown;
 
 use App\Library\Config\ConfigInterface;
 use League\CommonMark\Environment\Environment;
@@ -11,7 +11,7 @@ use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\MarkdownConverter;
 
-class MarkdownParser
+class LeagueMarkdownParser implements MarkdownParserInterface
 {
     private MarkdownConverter $markdownConverter;
 
@@ -23,7 +23,9 @@ class MarkdownParser
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new FrontMatterExtension());
         foreach ($config['extensions'] as $extension) {
-            $environment->addExtension(new $extension());
+            if (class_exists($extension)) {
+                $environment->addExtension(new $extension());
+            }
         }
         $this->markdownConverter = new MarkdownConverter($environment);
     }

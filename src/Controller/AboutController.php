@@ -10,8 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AboutController
 {
-
-
     public function __construct(private RendererInterface $view)
     {
     }
