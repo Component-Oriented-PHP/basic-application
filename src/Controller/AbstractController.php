@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Library\View\PlatesRenderer;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
 
 abstract class AbstractController
 {
@@ -31,5 +34,20 @@ abstract class AbstractController
     protected function getView(): PlatesRenderer
     {
         return $this->view;
+    }
+
+    protected function html(string $html, int $status = 200, array $headers = []): HtmlResponse
+    {
+        return new HtmlResponse($html, $status, $headers);
+    }
+
+    protected function json(array $data, int $status = 200, array $headers = []): JsonResponse
+    {
+        return new JsonResponse($data, $status, $headers);
+    }
+
+    protected function redirect(string $url, int $status = 302, array $headers = []): RedirectResponse
+    {
+        return new RedirectResponse($url, $status, $headers);
     }
 }
