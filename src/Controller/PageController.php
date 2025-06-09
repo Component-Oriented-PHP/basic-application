@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Library\View\RendererInterface;
 use App\Service\Markdown\MarkdownParserInterface;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,8 +21,20 @@ class PageController
 
     public function show(ServerRequestInterface $request): ResponseInterface
     {
+        $slug = $request->getAttribute('slug');
+        $markdownFile = __DIR__ . '/../../content/' . $slug . '.md';
 
-        $page = []; // TODO: logic to get page
+        if (!file_exists($markdownFile)) {
+            return new HtmlResponse($this->view->render('404'));
+        }
+
+        $page = $this->markdown->parse(file_get_contents($markdownFile));
+
+        return new HtmlResponse($this->view->render('page/show', [
+            'title' => $page['title'],
+            'description' => $page['description'],
+            'page' => $page
+        ]));
     }
 
 }
