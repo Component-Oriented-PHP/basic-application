@@ -8,8 +8,10 @@
         "dikki/dotenv": "^2.0",
         "filp/whoops": "^2.18",
         "laminas/laminas-diactoros": "^3.6",
+        "league/commonmark": "^2.7",
         "league/plates": "^3.6",
         "rdlowrey/auryn": "^1.4",
+        "symfony/yaml": "^7.3",
         "twig/twig": "^3.21"
     },
     "autoload": {
