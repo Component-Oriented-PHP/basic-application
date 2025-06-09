@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Library\View\RendererInterface;
-use App\Service\Markdown\MarkdownParserInterface;
 use App\Service\PageFetcher;
-use Laminas\Diactoros\Response\HtmlResponse;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class PageController
 {
 
     public function __construct(
         private PageFetcher $pageFetcher,
-        private RendererInterface $view
+        private RendererInterface $view,
+        private ResponseFactoryInterface $responseFactory,
+        private StreamFactoryInterface $streamFactory
     ) {
     }
 
@@ -27,14 +29,22 @@ class PageController
         $page = $this->pageFetcher->fetchSingle($slug);
 
         if (!$page) {
-            return new HtmlResponse($this->view->render('404'), 404);
+            $html = $this->view->render('404');
+            $stream = $this->streamFactory->createStream($html);
+
+            return $this->responseFactory->createResponse(404)->withBody($stream);
         }
 
-        return new HtmlResponse($this->view->render('page/show', [
+        // separated for clarity and readability
+        $html = $this->view->render('page/show', [
             'title' => $page['title'],
             'description' => $page['description'],
             'page' => $page
-        ]));
+        ]);
+
+        $stream = $this->streamFactory->createStream($html);
+
+        return $this->responseFactory->createResponse(200)->withBody($stream);
     }
 
 }
