@@ -2,6 +2,14 @@
 
 {% block content %}
 Welcome to <span class="twig">Twig</span>!
+
+<h2>Top Pages</h2>
+
+<ul>
+    {% for page in pages %}
+    <li><a href="/{{ page.slug }}">{{ page.title }}</a>: {{ page.description }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
 
 {% block styles %}
