@@ -2,6 +2,8 @@
 
 use App\Library\Config\ConfigInterface;
 use App\Library\Config\PHPConfigFetcher;
+use App\Library\Http\CustomResponse;
+use App\Library\Http\CustomResponseInterface;
 use App\Library\View\RendererInterface;
 use App\Library\View\TwigRenderer;
 use App\Service\Markdown\LeagueMarkdownParser;
@@ -17,4 +19,6 @@ return [
     MarkdownParserInterface::class => LeagueMarkdownParser::class,
 
     PageFetcher::class => PageFetcher::class,
+
+    CustomResponseInterface::class => CustomResponse::class
 ];
