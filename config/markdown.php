@@ -5,6 +5,7 @@ use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
 
 return [
+    'content_dir' => __DIR__ . '/../content',
     'config' => [
         'attributes' => [
             'allow' => ['id', 'class', 'align'],

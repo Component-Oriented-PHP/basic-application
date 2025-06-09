@@ -6,6 +6,7 @@ use App\Library\View\RendererInterface;
 use App\Library\View\TwigRenderer;
 use App\Service\Markdown\LeagueMarkdownParser;
 use App\Service\Markdown\MarkdownParserInterface;
+use App\Service\PageFetcher;
 
 return [
     RendererInterface::class => TwigRenderer::class,
@@ -13,5 +14,7 @@ return [
 
     ConfigInterface::class => PHPConfigFetcher::class,
 
-    MarkdownParserInterface::class => LeagueMarkdownParser::class
+    MarkdownParserInterface::class => LeagueMarkdownParser::class,
+
+    PageFetcher::class => PageFetcher::class,
 ];
