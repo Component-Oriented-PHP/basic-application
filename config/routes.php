@@ -7,5 +7,5 @@ return [
     'page' => ['get', '/{slug}', '\App\Controller\PageController::show'],
 
     'api.page' => ['get', '/api/page', '\App\Controller\Api\PageController::index'],
-    'api.page.show' => ['get', '/api/page/{slug}', '\App\Controller\Api\PageController::show'],
+    'api.page.show' => ['get', '/api/page/{slug}', '\App\Controller\Api\PageController::show', 'apiauth'],
 ];

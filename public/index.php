@@ -49,9 +49,32 @@ foreach ($routes as $name => $route) {
     $handler = explode('::', $route[2]);
     $controller = $handler[0];
     $method = $handler[1];
+    $filter = $route[3] ?? null;
 
     // we need to make use of DI container to pass the necessary services to controller for usage
-    $map->$requestMethod($name, $path, function ($request) use ($controller, $method, $container) {
+    $map->$requestMethod($name, $path, function ($request) use ($controller, $method, $container, $path, $filter) {
+        // api auth
+        if ($filter === 'apiauth') {
+            // get response
+            $response = $container->make(\App\Library\Http\CustomResponseInterface::class);
+
+            // x-api-key is set
+            if (!$request->hasHeader('x-api-key')) {
+                return $response->json([
+                    'success' => false,
+                    'message' => 'Missing API key'
+                ], 401);
+            }
+
+            // x-api-key is valid
+            if ($request->getHeaderLine('x-api-key') !== getenv('API_KEY')) {
+                return $response->json([
+                    'success' => false,
+                    'message' => 'Invalid API key'
+                ], 401);
+            }
+        }
+
         // Here's the magic! The container automatically creates the controller
         // and injects all its dependencies
         $controllerInstance = $container->make($controller); // this is needed; we need to instantiate controller via DI
