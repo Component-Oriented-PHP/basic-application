@@ -17,9 +17,14 @@ class PageController
     ) {
     }
 
-    public function index(): ResponseInterface
+    public function index(ServerRequestInterface $request): ResponseInterface
     {
-        // get all pages
+        // Authenticate the endpoint. If it returns a response, return it immediately.
+        if ($authResponse = $this->authenticate($request, $this->response)) {
+            return $authResponse;
+        }
+
+        // This code will only run if authentication was successful
         $pages = $this->pageFetcher->fetchAll();
 
         // create a response
@@ -31,13 +36,15 @@ class PageController
 
     public function show(ServerRequestInterface $request): ResponseInterface
     {
-        // get the slug
-        $slug = $request->getAttribute('slug');
+        // Authenticate the endpoint. If it returns a response, return it immediately.
+        if ($authResponse = $this->authenticate($request, $this->response)) {
+            return $authResponse;
+        }
 
-        // get the page
+        // This code will only run if authentication was successful
+        $slug = $request->getAttribute('slug');
         $page = $this->pageFetcher->fetchSingle($slug);
 
-        // if empty
         if (!$page) {
             return $this->response->json([
                 'success' => false,
@@ -50,5 +57,27 @@ class PageController
             'success' => true,
             'data' => $page
         ]);
+    }
+
+    private function authenticate(ServerRequestInterface $request, CustomResponseInterface $response)
+    {
+
+        // x-api-key is set
+        if (!$request->hasHeader('x-api-key')) {
+            return $response->json([
+                'success' => false,
+                'message' => 'Missing API key'
+            ], 401);
+        }
+
+        // x-api-key is valid
+        if ($request->getHeaderLine('x-api-key') !== '1234567890') {
+            return $response->json([
+                'success' => false,
+                'message' => 'Invalid API key'
+            ], 401);
+        }
+
+        return null;
     }
 }
