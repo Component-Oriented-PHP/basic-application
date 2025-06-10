@@ -53,25 +53,11 @@ foreach ($routes as $name => $route) {
 
     // we need to make use of DI container to pass the necessary services to controller for usage
     $map->$requestMethod($name, $path, function ($request) use ($controller, $method, $container, $path, $filter) {
-        // api auth
-        if ($filter === 'apiauth') {
-            // get response
-            $response = $container->make(\App\Library\Http\CustomResponseInterface::class);
-
-            // x-api-key is set
-            if (!$request->hasHeader('x-api-key')) {
-                return $response->json([
-                    'success' => false,
-                    'message' => 'Missing API key'
-                ], 401);
-            }
-
-            // x-api-key is valid
-            if ($request->getHeaderLine('x-api-key') !== getenv('API_KEY')) {
-                return $response->json([
-                    'success' => false,
-                    'message' => 'Invalid API key'
-                ], 401);
+        if ($filter) {
+            $filterService = $container->make(\App\Service\Filters::class);
+            $filterResponse = $filterService->runFilter(filter: $filter, request: $request);
+            if ($filterResponse) {
+                return $filterResponse;
             }
         }
 
